@@ -2,6 +2,9 @@ Hydrator
 ========
 
 [![Build Status](https://travis-ci.org/yoannrenard/hydrator.svg?branch=master)](https://travis-ci.org/yoannrenard/hydrator)
+[![Dependency Status](https://www.versioneye.com/user/projects/591b18d9b81f68004e81d257/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/591b18d9b81f68004e81d257/badge.svg?style=flat-square)
+[![Latest Stable Version](https://poser.pugx.org/yoannrenard/hydrator/v/stable.png)](https://packagist.org/packages/yoannrenard/hydrator)
+[![Latest Unstable Version](https://poser.pugx.org/yoannrenard/hydrator/v/unstable.png)](https://packagist.org/packages/yoannrenard/hydrator)
 
 Hydrate your entities from an array without reflexion
 
@@ -31,4 +34,4 @@ Or if you can't be bothered just create an [issue][6].
 [3]: http://semver.org/
 [4]: https://getcomposer.org/doc/00-intro.md#globally
 [5]: https://symfony.com/doc/current/contributing/code/patches.html
-[6]: https://github.com/yoannrenard/.../issues/new
+[6]: https://github.com/yoannrenard/hydrator/issues/new
