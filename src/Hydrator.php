@@ -3,18 +3,24 @@
 namespace YoannRenard\Hydrator;
 
 use YoannRenard\Hydrator\Exception\InvalidMappingException;
+use YoannRenard\Hydrator\Instantiator\InstantiatorInterface;
 
 class Hydrator implements HydratorInterface
 {
+    /** @var InstantiatorInterface */
+    protected $instantiator;
+
     /** @var array */
     protected $mapping;
 
     /**
-     * @param array $mapping
+     * @param InstantiatorInterface $instantiator
+     * @param array                 $mapping
      */
-    public function __construct(array $mapping)
+    public function __construct(InstantiatorInterface $instantiator, array $mapping = [])
     {
-        $this->mapping = $mapping;
+        $this->instantiator = $instantiator;
+        $this->mapping      = $mapping;
     }
 
     /**
@@ -26,8 +32,7 @@ class Hydrator implements HydratorInterface
             throw InvalidMappingException::invalidMappedClass($className);
         }
 
-        $ref = new \ReflectionClass($className);
-        $object = $ref->newInstanceWithoutConstructor();
+        $object = $this->instantiator->instantiate($className);
 
         $changePropertyClosure = function ($property, $value) {
             $this->$property = $value;

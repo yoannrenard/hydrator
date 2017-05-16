@@ -2,37 +2,17 @@
 
 namespace YoannRenard\Hydrator;
 
-class Person
-{
-    private $lastName;
-    private $firstName;
-
-    /**
-     * Person constructor.
-     *
-     * @param $lastName
-     */
-    public function __construct($lastName)
-    {
-        $this->lastName = $lastName;
-    }
-
-
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-}
+use YoannRenard\Hydrator\Dummy;
+use YoannRenard\Hydrator\Instantiator\InstantiatorInterface;
+use YoannRenard\Hydrator\Instantiator\ReflexionInstantiator;
 
 class HydratorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Hydrator */
     protected $hydrator;
+
+    /** @var InstantiatorInterface */
+    protected $instantiator;
 
     /**
      * @inheritdoc
@@ -41,8 +21,19 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->hydrator = new Hydrator([
-            Person::class => [
+        // Unfortunately a mock does not work here
+        $this->instantiator = new ReflexionInstantiator();
+
+        $this->hydrator = new Hydrator($this->instantiator, [
+            Dummy\Company::class => [
+                'persons' => [
+                    Dummy\Person::class => [
+                        'lastName'  => 'lastName',
+                        'firstName' => 'firstName',
+                    ],
+                ]
+            ],
+            Dummy\Person::class => [
                 'lastName'  => 'lastName',
                 'firstName' => 'firstName',
             ],
@@ -65,11 +56,11 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \YoannRenard\Hydrator\Exception\InvalidMappingException
-     * @expectedExceptionMessage The `nom` property isn't mapped in `YoannRenard\Hydrator\Person`.
+     * @expectedExceptionMessage The `nom` property isn't mapped in `YoannRenard\Hydrator\Dummy\Person`.
      */
     public function it_throws_an_exception_as_the_property_mapped_does_not_match()
     {
-        $this->hydrator->hydrate(Person::class, [
+        $this->hydrator->hydrate(Dummy\Person::class, [
             'nom'    => 'Parker',
             'prenom' => 'Peter',
         ]);
@@ -80,13 +71,46 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
      */
     public function it_hydrates_properly_a_person()
     {
-        /** @var Person $peterParker */
-        $peterParker = $this->hydrator->hydrate(Person::class, [
+        /** @var Dummy\Person $peterParker */
+        $peterParker = $this->hydrator->hydrate(Dummy\Person::class, [
             'lastName'  => 'Parker',
             'firstName' => 'Peter',
         ]);
 
         $this->assertEquals('Parker', $peterParker->getLastName());
         $this->assertEquals('Peter', $peterParker->getFirstName());
+    }
+
+    /**
+     * @test
+     */
+    public function it_hydrates_properly_a_company_with_persons()
+    {
+        /** @var Dummy\Company $spiderMan */
+        $spiderMan = $this->hydrator->hydrate(Dummy\Company::class, [
+            'persons' => [
+                $this->hydrator->hydrate(Dummy\Person::class, [
+                    'lastName'  => 'Parker',
+                    'firstName' => 'Peter',
+                ]),
+                $this->hydrator->hydrate(Dummy\Person::class, [
+                    'lastName'  => 'Goblin',
+                    'firstName' => 'Green',
+                ]),
+                $this->hydrator->hydrate(Dummy\Person::class, [
+                    'lastName'  => 'Cat',
+                    'firstName' => 'Black',
+                ]),
+            ],
+        ]);
+
+        $this->assertEquals(
+            new Dummy\Company([
+                new Dummy\Person('Parker', 'Peter'),
+                new Dummy\Person('Goblin', 'Green'),
+                new Dummy\Person('Cat', 'Black'),
+            ]),
+            $spiderMan
+        );
     }
 }
