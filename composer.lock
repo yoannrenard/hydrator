@@ -4,9 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d4b4c0b68c8f13562011b27ff5d7d1f",
-    "packages": [],
-    "packages-dev": [
+    "content-hash": "6aba46af2b498855d92dda1760bd17ae",
+    "packages": [
         {
             "name": "doctrine/instantiator",
             "version": "1.0.5",
@@ -60,7 +59,9 @@
                 "instantiate"
             ],
             "time": "2015-06-14T21:17:01+00:00"
-        },
+        }
+    ],
+    "packages-dev": [
         {
             "name": "myclabs/deep-copy",
             "version": "1.6.1",
@@ -1319,6 +1320,45 @@
                 "validate"
             ],
             "time": "2016-11-23T20:04:58+00:00"
+        },
+        {
+            "name": "yoannrenard/phpunit-annotation-testcase",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yoannrenard/phpunit-annotation-testcase.git",
+                "reference": "fb3bfaf8447ecbcc4aef196bac8824ce602130cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yoannrenard/phpunit-annotation-testcase/zipball/fb3bfaf8447ecbcc4aef196bac8824ce602130cc",
+                "reference": "fb3bfaf8447ecbcc4aef196bac8824ce602130cc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "YoannRenard\\PHPUnitAnnotation\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yoann RENARD",
+                    "email": "renard.yoann@gmail.com"
+                }
+            ],
+            "description": "Use simple annotation to mock the world",
+            "time": "2017-05-12T14:37:10+00:00"
         }
     ],
     "aliases": [],
