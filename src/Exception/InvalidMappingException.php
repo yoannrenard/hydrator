@@ -2,7 +2,7 @@
 
 namespace YoannRenard\Hydrator\Exception;
 
-class InvalidMappingException extends \RuntimeException
+class InvalidMappingException extends \RuntimeException implements HydratorInterface
 {
     /**
      * @param string $className

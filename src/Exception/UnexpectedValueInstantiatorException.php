@@ -2,6 +2,6 @@
 
 namespace YoannRenard\Hydrator\Exception;
 
-class UnexpectedValueInstantiatorException extends InstantiatorException
+class UnexpectedValueInstantiatorException extends InstantiatorException implements HydratorInterface
 {
 }

@@ -7,14 +7,25 @@ class Company
     /** @var Person[] */
     private $persons;
 
+    /** @var Address */
+    private $address;
+
     /**
-     * Company constructor.
-     *
+     * @param Address  $address
      * @param Person[] $persons
      */
-    public function __construct(array $persons)
+    public function __construct(Address $address, array $persons = [])
     {
+        $this->address = $address;
         $this->persons = $persons;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 
     /**

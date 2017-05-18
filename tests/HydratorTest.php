@@ -2,7 +2,11 @@
 
 namespace YoannRenard\Hydrator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use YoannRenard\Hydrator\Dummy;
+use YoannRenard\Hydrator\Entity\Config;
+use YoannRenard\Hydrator\Entity\Element;
+use YoannRenard\Hydrator\Entity\Property;
 use YoannRenard\Hydrator\Instantiator\InstantiatorInterface;
 use YoannRenard\Hydrator\Instantiator\ReflexionInstantiator;
 
@@ -24,20 +28,25 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
         // Unfortunately a mock does not work here
         $this->instantiator = new ReflexionInstantiator();
 
-        $this->hydrator = new Hydrator($this->instantiator, [
-            Dummy\Company::class => [
-                'persons' => [
-                    Dummy\Person::class => [
-                        'lastName'  => 'lastName',
-                        'firstName' => 'firstName',
-                    ],
-                ]
-            ],
-            Dummy\Person::class => [
-                'lastName'  => 'lastName',
-                'firstName' => 'firstName',
-            ],
-        ]);
+        $config = new Config(new ArrayCollection([
+            // Company
+            new Element(Dummy\Company::class, new ArrayCollection([
+                new Property('address', Dummy\Address::class),
+                new Property('persons', Dummy\Person::class, $isCollection = true),
+            ])),
+            // Address
+            new Element(Dummy\Address::class, new ArrayCollection([
+                new Property('address'),
+            ])),
+            // Person
+            new Element(Dummy\Person::class, new ArrayCollection([
+                new Property('lastName'),
+                new Property('firstName'),
+                new Property('birthdate', \DateTimeImmutable::class, $isCollection = false, $useConstructor = true),
+            ])),
+        ]));
+
+        $this->hydrator = new Hydrator($this->instantiator, $config);
     }
 
     /**
@@ -84,33 +93,55 @@ class HydratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_hydrates_properly_a_company_with_one_address()
+    {
+        /** @var Dummy\Company $spiderMan */
+        $spiderMan = $this->hydrator->hydrate(Dummy\Company::class, [
+            'address' => [
+                'address' => '1 rue des Alouettes',
+            ],
+        ]);
+
+        $this->assertInstanceOf(Dummy\Company::class, $spiderMan);
+        $this->assertEquals('1 rue des Alouettes', $spiderMan->getAddress()->getAddress());
+    }
+
+    /**
+     * @test
+     */
     public function it_hydrates_properly_a_company_with_persons()
     {
         /** @var Dummy\Company $spiderMan */
         $spiderMan = $this->hydrator->hydrate(Dummy\Company::class, [
             'persons' => [
-                $this->hydrator->hydrate(Dummy\Person::class, [
+                [
                     'lastName'  => 'Parker',
                     'firstName' => 'Peter',
-                ]),
-                $this->hydrator->hydrate(Dummy\Person::class, [
+                    'birthdate' => '2017-05-18',
+                ],
+                [
                     'lastName'  => 'Goblin',
                     'firstName' => 'Green',
-                ]),
-                $this->hydrator->hydrate(Dummy\Person::class, [
+                    'birthdate' => ['2017-05-18', new \DateTimeZone('Europe/Paris')]
+                ],
+                [
                     'lastName'  => 'Cat',
                     'firstName' => 'Black',
-                ]),
+                ],
+                [
+                ],
             ],
         ]);
 
+        $this->assertInstanceOf(Dummy\Company::class, $spiderMan);
         $this->assertEquals(
-            new Dummy\Company([
-                new Dummy\Person('Parker', 'Peter'),
-                new Dummy\Person('Goblin', 'Green'),
+            [
+                new Dummy\Person('Parker', 'Peter', new \DateTimeImmutable('2017-05-18')),
+                new Dummy\Person('Goblin', 'Green', new \DateTimeImmutable('2017-05-18', new \DateTimeZone('Europe/Paris'))),
                 new Dummy\Person('Cat', 'Black'),
-            ]),
-            $spiderMan
+                new Dummy\Person(null, null),
+            ],
+            $spiderMan->getPersons()
         );
     }
 }

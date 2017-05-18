@@ -2,6 +2,6 @@
 
 namespace YoannRenard\Hydrator\Exception;
 
-class InstantiatorException extends \RuntimeException
+class InstantiatorException extends \RuntimeException implements HydratorInterface
 {
 }

@@ -2,6 +2,6 @@
 
 namespace YoannRenard\Hydrator\Exception;
 
-class InvalidArgumentInstantiatorException extends InstantiatorException
+class InvalidArgumentInstantiatorException extends InstantiatorException implements HydratorInterface
 {
 }

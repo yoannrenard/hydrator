@@ -10,20 +10,24 @@ Hydrate your entities from an array without reflexion
 
 Inspired by [Alexander Makarov / @samdark hydrator][1] and [this article][2], this project follows the [semantic versioning][3].
 
-# Requirements
+## Requirements
 
 - PHP >=5.6
 - [Composer][4]
 
-# How to install
+## How to install
 
     $> composer install
 
-# Test it
+## Test it
 
     $> bin/phpunit
 
-# Contributing
+## Usage
+
+...
+
+## Contributing
 
 For any contribution, thanks to make a pull request and don't forget to rebase your branch from `master` as I'm sure you usually do with [Symfony][5].
 

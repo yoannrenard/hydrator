@@ -10,14 +10,19 @@ class Person
     /** @var string */
     private $firstName;
 
+    /** @var \DateTimeImmutable */
+    private $birthdate;
+
     /**
-     * @param string $lastName
-     * @param string $firstName
+     * @param string             $lastName
+     * @param string             $firstName
+     * @param \DateTimeImmutable $birthdate
      */
-    public function __construct($lastName, $firstName)
+    public function __construct($lastName, $firstName, \DateTimeImmutable $birthdate = null)
     {
         $this->lastName  = $lastName;
         $this->firstName = $firstName;
+        $this->birthdate = $birthdate;
     }
 
     /**
@@ -34,5 +39,13 @@ class Person
     public function getFirstName()
     {
         return $this->firstName;
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function getBirthdate()
+    {
+        return $this->birthdate;
     }
 }
