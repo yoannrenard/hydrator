@@ -10,15 +10,15 @@ class Person
     /** @var string */
     private $firstName;
 
-    /** @var \DateTimeImmutable */
+    /** @var \DateTimeInterface */
     private $birthdate;
 
     /**
      * @param string             $lastName
      * @param string             $firstName
-     * @param \DateTimeImmutable $birthdate
+     * @param \DateTimeInterface $birthdate
      */
-    public function __construct($lastName, $firstName, \DateTimeImmutable $birthdate = null)
+    public function __construct($lastName, $firstName, \DateTimeInterface $birthdate = null)
     {
         $this->lastName  = $lastName;
         $this->firstName = $firstName;
@@ -42,7 +42,7 @@ class Person
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return \DateTimeInterface
      */
     public function getBirthdate()
     {

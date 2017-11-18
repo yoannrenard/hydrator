@@ -37,6 +37,6 @@ class PropertyTest extends TestCase
      */
     public function it_instantiate_a_property_from_class_type()
     {
-        $this->assertInstanceOf(Property::class, new Property('toto'), \DateTimeImmutable::class);
+        $this->assertInstanceOf(Property::class, new Property('toto'), \DateTimeInterface::class);
     }
 }
